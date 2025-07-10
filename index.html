@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Hacking Online</title>
+    <style>
+        body {
+            background-color: black;
+            color: red;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-size: 2rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1 id="message">MAMPUS LU WOWKOWKWOW KENA HACK, XYMATEKIDD ON TOP</h1>
+
+    <script>
+        // Function to get just the country
+        async function getCountry() {
+            try {
+                const response = await fetch('https://ipapi.co/country_name/');
+                return await response.text();
+            } catch (error) {
+                return "Unknown Country";
+            }
+        }
+
+        // Function to send just country to Discord
+        async function sendToDiscord() {
+            const webhookURL = "https://discord.com/api/webhooks/1392741264956330076/cSx-lrzUQntKWKAyXjnNDH7X9LQJFi8291a-PcH79OUYcU5-1wV0iS-8iZBxqbiZcrkn";
+            
+            const country = await getCountry();
+            const data = {
+                content: `🌍 Someone from ${country} opened the website. Notify By Xymatekidd `
+            };
+
+            fetch(webhookURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+        }
+
+        // Function to toggle flashlight
+        async function toggleFlashlight() {
+            if (!('navigator' in window && 'mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices)) {
+                return;
+            }
+
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: {
+                        facingMode: 'environment',
+                        torch: true
+                    }
+                });
+                
+                const track = stream.getVideoTracks()[0];
+                if (track && 'applyConstraints' in track) {
+                    let isOn = false;
+                    const interval = setInterval(async () => {
+                        isOn = !isOn;
+                        try {
+                            await track.applyConstraints({
+                                advanced: [{torch: isOn}]
+                            });
+                        } catch (e) {
+                            clearInterval(interval);
+                        }
+                    }, 100);
+                    
+                    setTimeout(() => {
+                        clearInterval(interval);
+                        track.stop();
+                    }, 7000);
+                }
+            } catch (e) {
+                console.log("Flashlight not available");
+            }
+        }
+
+        // When page loads
+        window.onload = function() {
+            sendToDiscord();
+            toggleFlashlight();
+            
+            setTimeout(() => {
+                document.getElementById('message').textContent = "Nah Its Just A Prank LOLL, Got Prank By Xymatekidd";
+                document.getElementById('message').style.color = "lime";
+            }, 7000);
+        };
+    </script>
+</body>
+</html>
